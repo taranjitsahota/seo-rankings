@@ -3,11 +3,48 @@ import { Head, Link } from "@inertiajs/react";
 import { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 import axios from 'axios';
-import ChartComponent from "@/components/ChartComponent"; // If you have aliasing set up in Vite
 
-export default function Dashboard({ auth,projects }) {
+export default function Dashboard({ auth, projects }) {
+    const [chartData, setChartData] = useState({
+        series: [],
+        options: {
+            chart: {
+                type: "line",
+                height: 350,
+            },
+            xaxis: {
+                categories: [],
+            },
+        },
+    });
 
-    
+    useEffect(() => {
+        axios.get("http://127.0.0.1:8000/api/projects/keywords")
+            .then((response) => {
+                const projects = response.data;
+
+                const seriesData = projects.map((project) => ({
+                    name: project.name,
+                    data: project.data,
+                }));
+
+                setChartData({
+                    series: seriesData,
+                    options: {
+                        chart: { type: "bar" },
+                        xaxis: { categories: projects[0]?.data.map((_, index) => `Keyword ${index + 1}`) || [] },
+                        plotOptions: {
+                            bar: {
+                                horizontal: false,
+                                columnWidth: "10%",
+                            },
+                        },
+                    },
+                });
+            })
+            .catch((error) => console.error(error));
+    }, []);
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -58,7 +95,6 @@ export default function Dashboard({ auth,projects }) {
                                                     <p className="text-gray-500">No keywords</p>
                                                 )}
                                             </td>
-                                           
                                         </tr>
                                     ))}
                                 </tbody>
@@ -69,7 +105,9 @@ export default function Dashboard({ auth,projects }) {
                     </div>
 
                     <h1 className="text-2xl font-bold mb-4">Keyword Rankings</h1>
-                    <ChartComponent />
+                    <div className="p-4 bg-white rounded shadow">
+                        <Chart options={chartData.options} series={chartData.series} type="bar" height={350} />
+                    </div>
                 </div>
             </div>
         </AuthenticatedLayout>

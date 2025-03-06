@@ -3,7 +3,7 @@ import { Head, Link } from "@inertiajs/react";
 import { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 import axios from 'axios';
-import ChartComponent from "../components/ChartComponent";
+import ChartComponent from "@/components/ChartComponent"; // If you have aliasing set up in Vite
 
 export default function Dashboard({ auth,projects }) {
 

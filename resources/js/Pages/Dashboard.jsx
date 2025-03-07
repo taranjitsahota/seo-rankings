@@ -19,7 +19,7 @@ export default function Dashboard({ auth, projects }) {
     });
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/projects/keywords")
+        axios.get("https://seo-rankings-pvvk.onrender.com/api/projects/keywords")
             .then((response) => {
                 const projects = response.data;
 

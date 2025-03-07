@@ -28,18 +28,49 @@ class ProjectController extends Controller
     return Inertia::render('Projects', ['projects' => $projects]);
     }
 
-    public function getProjectKeywordData()
-{
-    $projects = Project::with('keywords')->get();
+//     public function getProjectKeywordData()
+// {
+//     $projects = Project::with('keywords')->get();
 
-    $formattedData = $projects->map(function ($project) {
-        return [
-            'name' => $project->name,
-            'data' => $project->keywords->map(fn ($keyword) => $keyword->ranking)->toArray(),
-        ];
-    });
-    return response()->json($formattedData);
-}
+//     $formattedData = $projects->map(function ($project) {
+//         return [
+//             'name' => $project->name,
+//             'data' => $project->keywords->map(fn ($keyword) => $keyword->ranking)->toArray(),
+//         ];
+//     });
+//     return response()->json($formattedData);
+// }
+
+    public function getProjectKeywordData()
+    {
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+        
+        $query = Project::with('keywords');
+
+        // If the user is not an admin, show only their projects
+        if (!$user->isAdmin()) {
+            $query->where('user_id', auth()->id());
+        }
+
+        $projects = $query->get();
+
+        $formattedData = $projects->map(function ($project) {
+            return [
+                'name' => $project->name,
+                'keywords' => $project->keywords->map(function ($keyword) {
+                    return [
+                        'keyword' => $keyword->keyword,
+                        'ranking' => $keyword->ranking,
+                        'search_volume' => $keyword->search_volume,
+                        'competition' => $keyword->competition,
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json($formattedData);
+    }
 
     
 

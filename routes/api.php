@@ -16,8 +16,7 @@ use App\Http\Controllers\ProjectController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/projects/keywords', [ProjectController::class, 'getProjectKeywordData']);
-
+Route::get('/projects/keywords', [ProjectController::class, 'getProjectKeywordData']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

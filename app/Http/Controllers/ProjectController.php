@@ -41,16 +41,24 @@ class ProjectController extends Controller
 //     return response()->json($formattedData);
 // }
 
-    public function getProjectKeywordData()
+    public function getProjectKeywordData(Request $request)
     {
-        /** @var \App\Models\User $user */
-        $user = auth()->user();
-        
-        $query = Project::with('keywords');
+          /** @var \App\Models\User $user */
+        $user = auth()->user(); // Get the authenticated user
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $query = Project::with(['keywords' => function ($query) use ($request) {
+            if ($request->has('date')) {
+                $query->whereDate('created_at', $request->date);
+            }
+        }]);
 
         // If the user is not an admin, show only their projects
         if (!$user->isAdmin()) {
-            $query->where('user_id', auth()->id());
+            $query->where('user_id', $user->id);
         }
 
         $projects = $query->get();
@@ -64,6 +72,7 @@ class ProjectController extends Controller
                         'ranking' => $keyword->ranking,
                         'search_volume' => $keyword->search_volume,
                         'competition' => $keyword->competition,
+                        'date' => $keyword->created_at->format('Y-m-d'),
                     ];
                 }),
             ];

@@ -10,4 +10,9 @@ export default defineConfig({
         }),
         react(),
     ],
+    server: {
+        hmr: {
+            protocol: "wss", // Use secure WebSockets for hot reloading
+        },
+    },
 });

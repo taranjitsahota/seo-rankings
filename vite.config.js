@@ -7,7 +7,6 @@ export default defineConfig({
         laravel({
             input: 'resources/js/app.jsx',
             refresh: true,
-            valetTls: process.env.APP_ENV === "production",
         }),
         react(),
     ],

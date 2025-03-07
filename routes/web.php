@@ -19,9 +19,7 @@ Route::get('/', function () {
 
 // Dashboard Route
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', [
-        'projects' => \App\Models\Project::with('keywords')->where('user_id', auth()->id())->get(),
-    ]);
+    return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Profile Routes (Requires Authentication)
@@ -46,9 +44,7 @@ Route::middleware('auth')->group(function () {
     
     // Keywords Index Page with Auth
     Route::get('/keywords', function () {
-        return Inertia::render('Keywords', [
-            'projects' => \App\Models\Project::with('keywords')->where('user_id', auth()->id())->get(),
-        ]);
+        return Inertia::render('Keywords');
     })->name('keywords.index');
 });
 

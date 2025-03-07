@@ -40,10 +40,8 @@ class DataForSEOService
 
             // Decode JSON response
             $body = $response->getBody()->getContents();
-            dd($body);
             $data = json_decode($body, true);
             Log::info('DataForSEO API Response:', $data);
-            dd($data);
 
             return $data;
 

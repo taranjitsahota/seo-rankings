@@ -17,7 +17,6 @@ class UpdateKeywordRankings extends Command
         // dd($keywords);
         foreach ($keywords as $keyword) {
             $rankingData = $seoService->getKeywordRankings($keyword->project->url, $keyword->keyword);
-            dd($rankingData);
             if (!empty($rankingData['result'])) {
                 $keyword->update([
                     'ranking' => $rankingData['result'][0]['position'] ?? null,

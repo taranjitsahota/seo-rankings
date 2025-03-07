@@ -13,8 +13,8 @@ services:
       - .:/var/www/html
     networks:
       - laravel_network
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
 
   #    # Node.js Service
   # node:
@@ -31,20 +31,20 @@ services:
   #     - laravel_network
 
 
-  # MySQL Database Service
-  db:
-    image: mysql:8.0
-    container_name: laravel-db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: '!2sdu%EtjWVj3Bs'
-      MYSQL_DATABASE: freedb_seo-rankings
-      MYSQL_USER: freedb_root-seo-laravel
-      MYSQL_PASSWORD: '!2sdu%EtjWVj3Bs'
-    volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - laravel_network
+  # # MySQL Database Service
+  # db:
+  #   image: mysql:8.0
+  #   container_name: laravel-db
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: '!2sdu%EtjWVj3Bs'
+  #     MYSQL_DATABASE: freedb_seo-rankings
+  #     MYSQL_USER: freedb_root-seo-laravel
+  #     MYSQL_PASSWORD: '!2sdu%EtjWVj3Bs'
+  #   volumes:
+  #     - db_data:/var/lib/mysql
+  #   networks:
+  #     - laravel_network
 
   # # PHPMyAdmin Service (Optional)
   # phpmyadmin:

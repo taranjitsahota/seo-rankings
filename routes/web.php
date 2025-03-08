@@ -6,6 +6,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProjectController;
+use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +21,19 @@ Route::get('/', function () {
 
 // Dashboard Route
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', [
-        'projects' => \App\Models\Project::with('keywords')->where('user_id', auth()->id())->auth()->user()->isAdmin()->get(),
-    ]);
+    $user = Auth::user();
+    $query = Project::with('keywords');
+
+    // If the user is not an admin, show only their projects
+    if (!$user->isAdmin()) {
+        $query->where('user_id', $user->id);
+    }
+
+    $projects = $query->latest()->get();
+
+    return Inertia::render('Dashboard', ['projects' => $projects]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 // Profile Routes (Requires Authentication)
 Route::middleware('auth')->group(function () {
@@ -47,9 +58,24 @@ Route::middleware('auth')->group(function () {
     // Keywords Index Page with Auth
     Route::get('/keywords', function () {
         return Inertia::render('Keywords', [
-            'projects' => \App\Models\Project::with('keywords')->where('user_id', auth()->id())->auth()->user()->isAdmin()->get(),
+            'projects' => \App\Models\Project::with('keywords')->where('user_id', auth()->id())->get(),
         ]);
     })->name('keywords.index');
+
+    Route::get('/keywords', function () {
+        $user = Auth::user();
+        $query = Project::with('keywords');
+    
+        // If the user is not an admin, show only their projects
+        if (!$user->isAdmin()) {
+            $query->where('user_id', $user->id);
+        }
+    
+        $projects = $query->latest()->get();
+    
+        return Inertia::render('Keywords', ['projects' => $projects]);
+    })->name('keywords.index');
+
 });
 
 require __DIR__.'/auth.php';

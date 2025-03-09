@@ -30,8 +30,18 @@ class ProjectController extends Controller
 
     public function getProjectKeywordData()
     {
-        $projects = Project::with('keywords')->get();
 
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $query = Project::with('keywords');
+
+        if (!$user->isAdmin()) {
+            $query->where('user_id', $user->id);
+        }
+
+        $projects = $query->get();
+        // $projects = Project::with('keywords')->get();
 
         $formattedData = $projects->map(function ($project) {
             return [

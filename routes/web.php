@@ -21,6 +21,7 @@ Route::get('/', function () {
 
 // Dashboard Route
 Route::get('/dashboard', function () {
+        /** @var \App\Models\User $user */
     $user = Auth::user();
     $query = Project::with('keywords');
 
@@ -63,6 +64,7 @@ Route::middleware('auth')->group(function () {
     })->name('keywords.index');
 
     Route::get('/keywords', function () {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $query = Project::with('keywords');
     

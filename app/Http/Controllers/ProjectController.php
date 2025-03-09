@@ -28,23 +28,20 @@ class ProjectController extends Controller
     return Inertia::render('Projects', ['projects' => $projects]);
     }
 
-//     public function getProjectKeywordData()
-// {
-//     $projects = Project::with('keywords')->get();
-
-//     $formattedData = $projects->map(function ($project) {
-//         return [
-//             'name' => $project->name,
-//             'data' => $project->keywords->map(fn ($keyword) => $keyword->ranking)->toArray(),
-//         ];
-//     });
-//     return response()->json($formattedData);
-// }
-
     public function getProjectKeywordData()
     {
-        $projects = Project::with('keywords')->get();
 
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $query = Project::with('keywords');
+
+        if (!$user->isAdmin()) {
+            $query->where('user_id', $user->id);
+        }
+
+        $projects = $query->latest()->get();
+        // $projects = Project::with('keywords')->get();
 
         $formattedData = $projects->map(function ($project) {
             return [

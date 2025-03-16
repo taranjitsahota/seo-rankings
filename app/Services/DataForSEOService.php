@@ -42,7 +42,7 @@ class DataForSEOService
             if (!empty($data['tasks'][0]['result'][0]['items'])) {
                 $items = $data['tasks'][0]['result'][0]['items'];
                 foreach ($items as $item) {
-                    if ($item['url'] == $url) {
+                    if (isset($item['url']) && str_contains($item['url'], $url)) {
                         return [
                             'position' => $item['rank_group'] ?? null,
                             'absolute_position' => $item['rank_absolute'] ?? null,

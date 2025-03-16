@@ -160,7 +160,7 @@ export default function Dashboard({ auth, projects }) {
                         Keyword Rankings
                     </h1>
                     <div className="p-4 bg-white rounded shadow">
-                        {chartData.series.length > 0 ? (
+                        {/* {chartData.series.length > 0 ? (
                             <Chart
                                 options={chartData.options}
                                 series={chartData.series}
@@ -171,7 +171,7 @@ export default function Dashboard({ auth, projects }) {
                             <p className="text-gray-500 text-center">
                                 No data available
                             </p>
-                        )}
+                        )} */}
                     </div>
                 </div>
             </div>

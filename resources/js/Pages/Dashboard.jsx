@@ -157,7 +157,7 @@ export default function Dashboard({ auth, projects }) {
                     </div>
 
                     <h1 className="text-2xl font-bold mb-4">
-                        Keyword Rankings
+                        {/* Keyword Rankings */}
                     </h1>
                     <div className="p-4 bg-white rounded shadow">
                         {/* {chartData.series.length > 0 ? (

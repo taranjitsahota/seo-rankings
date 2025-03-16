@@ -18,7 +18,7 @@ class ProjectController extends Controller
         $user = auth()->user();
         $query = Project::with('keywords');
 
-    // If the user is not an admin, show only their projects
+    // If user is not an admin, show only their projects
     if (!$user->isAdmin()) {
         $query->where('user_id', auth()->id());
     }

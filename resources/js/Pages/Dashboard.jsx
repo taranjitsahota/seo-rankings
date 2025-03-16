@@ -24,35 +24,33 @@ export default function Dashboard({ auth, projects }) {
             .then((response) => {
                 const projects = response.data;
 
-                const seriesData = [
-                    {
-                        name: "Ranking",
-                        data: projects.map((p) => ({
-                            x: p.name,
-                            y: p.keywords.map((k) => k.ranking ?? 0),
-                        })),
-                    },
-                    {
-                        name: "Search Volume",
-                        data: projects.map((p) => ({
-                            x: p.name,
-                            y: p.keywords.map((k) => k.search_volume ?? 0),
-                        })),
-                    },
-                    {
-                        name: "Competition",
-                        data: projects.map((p) => ({
-                            x: p.name,
-                            y: p.keywords.map((k) => k.competition ?? 0),
-                        })),
-                    },
-                ];
+                // Extracting project names and keywords
+                const categories = [];
+                const rankingData = [];
+                const searchVolumeData = [];
+                const competitionData = [];
+
+                projects.forEach((project) => {
+                    project.keywords.forEach((keyword) => {
+                        categories.push(`${project.name} - ${keyword.keyword}`);
+                        rankingData.push(keyword.ranking ?? 0);
+                        searchVolumeData.push(keyword.search_volume ?? 0);
+                        competitionData.push(keyword.competition ?? 0);
+                    });
+                });
 
                 setChartData({
-                    series: seriesData,
+                    series: [
+                        { name: "Ranking", data: rankingData },
+                        { name: "Search Volume", data: searchVolumeData },
+                        { name: "Competition", data: competitionData },
+                    ],
                     options: {
-                        chart: { type: "bar" },
-                        xaxis: { categories: projects.map((p) => p.name) },
+                        chart: { type: "bar", height: 350 },
+                        xaxis: { categories },
+                        plotOptions: {
+                            bar: { horizontal: false, columnWidth: "60%" },
+                        },
                     },
                 });
             })
@@ -167,7 +165,7 @@ export default function Dashboard({ auth, projects }) {
                                 options={chartData.options}
                                 series={chartData.series}
                                 type="bar"
-                                height={350}
+                                height={450}
                             />
                         ) : (
                             <p className="text-gray-500 text-center">

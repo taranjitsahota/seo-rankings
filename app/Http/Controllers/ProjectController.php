@@ -80,7 +80,7 @@ class ProjectController extends Controller
 
     $request->validate([
         'name' => 'required|string|max:255',
-        'url' => 'required|url|max:255'
+        'url' => 'required|max:255'
     ]);
 
     $user->projects()->create([

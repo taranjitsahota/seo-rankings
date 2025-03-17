@@ -26,14 +26,11 @@ class UpdateKeywordRankings extends Command
             $rankingData = $seoService->getKeywordRankings($keyword->project->url, $keyword->keyword);
             $metricsData = $seoService->getKeywordMetrics($keyword->keyword);
     
-            // Extract position data
             $position = $rankingData['position'] ?? null;
     
-            // Extract search volume & competition
             $searchVolume = $metricsData['search_volume'] ?? null;
             $competition = $metricsData['competition_index'] ?? null;
     
-            // Update the keyword in the database
             $keyword->update([
                 'ranking' => $position,
                 'search_volume' => $searchVolume,

@@ -14,7 +14,7 @@ class DataForSEOService
         $this->client = new Client([
             'base_uri' => 'https://api.dataforseo.com/',
             'headers' => [
-                'Authorization' => 'Basic ' . base64_encode('team@dmcockpit.com:451b6fc6a9a3ce7e'),
+                'Authorization' => 'Basic ' . base64_encode('dharm.pat@gmail.com:a070c50d5bcc38ce'),    
                 'Content-Type' => 'application/json',
             ],
         ]);        
@@ -42,13 +42,13 @@ class DataForSEOService
             if (!empty($data['tasks'][0]['result'][0]['items'])) {
                 $items = $data['tasks'][0]['result'][0]['items'];
                 foreach ($items as $item) {
-                    if (isset($item['url']) && str_contains($item['url'], $url)) {
+                    if (isset($item['domain']) && str_contains($item['domain'], $url)) {
                         return [
                             'position' => $item['rank_group'] ?? null,
                             'absolute_position' => $item['rank_absolute'] ?? null,
                             'domain' => $item['domain'] ?? null,
                             'title' => $item['title'] ?? null,
-                            'url' => $item['url'] ?? null
+                            'url' => $item['domain'] ?? null
                         ];
                     }
                 }
@@ -72,7 +72,7 @@ class DataForSEOService
                 'json' => [
                     [
                         'keywords' => [$keyword],
-                        'location_code' => 2840, // USA
+                        'location_code' => 2840,
                         'language_code' => 'en'
                     ]
                 ]
